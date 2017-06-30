@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%; height: 50px;">
+				<div style="float: left;margin-right: 100px;">
+					当前位置：用户管理->查看个人信息
+				</div>
+				<legend>当前位置</legend>
+			</fieldset>
+		</div>
+		
+		<div style="margin-top: 20px;">
+			<table border="1" cellspacing="1" width="100%" cellpadding="1">
+				<tr>
+					<td style="width: 200px;">职工号：</td>
+					<td id="t_id"></td>
+				</tr>
+				<tr>
+					<td style="width: 200px;">姓名：</td>
+					<td id="t_name"></td>
+				</tr>
+				<tr>
+					<td style="width: 200px;">性别：</td>
+					<td id="t_sex"></td>
+				</tr>
+				<tr>
+					<td style="width: 200px;">职称：</td>
+					<td id="zhicheng"></td>
+				</tr>
+				<tr>
+					<td style="width: 200px;">所属学院：</td>
+					<td id="xueyuan"></td>
+				</tr>
+				<tr>
+					<td style="width: 200px;">专业：</td>
+					<td id="zhuanye"></td>
+				</tr>
+			</table>
+		</div>
+		
+		<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+				$.ajax({
+					type:"get",
+					url:"http://localhost/xiangmuTwo/index.php?class=sql&action=techInfo",
+					success:function(res){
+						res = eval(res);
+						console.log(res);
+						$("#t_id").append("<span>"+res[0]["t_id"]+"</span>");
+						$("#t_name").append("<span>"+res[0]["t_name"]+"</span>");
+						$("#t_sex").append("<span>"+res[0]["sex"]+"</span>");
+						$("#zhicheng").append("<span>"+res[0]["zc_name"]+"</span>");
+						$("#xueyuan").append("<span>"+res[0]["x_name"]+"</span>");
+						$("#zhuanye").append("<span>"+res[0]["z_name"]+"</span>");						
+					}
+				});
+				
+			})
+		</script>
+	</body>
+</html>

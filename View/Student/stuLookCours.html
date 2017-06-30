@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%;min-height: 50px; ">
+				<div style="float: left;margin-right: 100px;">
+					当前位置：课程信息->查看所有选修课程
+				</div>
+				<legend>查询条件</legend>
+				<div>
+					<label>请选择查询的类型
+						<select name="select" id="selTechAdmin">
+							<option value="-1">请选择</option>
+							<option value="1">课程号</option>
+							<option value="2">课程名</option>
+							<option value="3">上课地址</option>
+							<option value="4">任课教师</option>
+						</select>
+						<input type="text" name="sel_inp" id="sel_inp" style="height: 20px; border-radius:15px;outline:none;padding-left: 10px;" placeholder='请输入要查询的条件'/>
+					</label>
+					<button id="butChaxuan" style="color:blue;width: 100px;height: 25px; border-radius: 15px; outline:none; box-shadow:2px 2px 5px gray">查询</button>
+				</div>
+			</fieldset>
+		</div>
+		
+		<div style="margin-top: 20px;">
+			<table border="1" cellspacing="1" cellpadding="1" width="100%" style="text-align: center">
+				<thead>
+					<tr>
+						<td>序号</td>
+						<td>课程号</td>
+						<td>课程名</td>
+						<td>上课地址</td>
+						<td>任课教师</td>
+						<td>操作</td>
+					</tr>
+				</thead>
+				<tbody id="tbody"></tbody>
+			</table>
+		</div>
+		
+		<div>
+			<input type="button" value="选择课程" id="xuanzheCourse"/>
+			<input type="button" value="取消选择" id="rest" />
+		</div>
+		
+		<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$.ajax({
+					type:"get",
+					url:"http://localhost/xiangmuTwo/index.php?class=sql&action=stuLookCours",
+					success:function(res){
+						res = eval(res);
+					//	console.log(res);
+						var a = 0;
+						for(var i = 0;i < res.length;i++){
+							a++;
+							var obj = res[i];
+							var xuanzhe = "<input type='checkbox' name='course' class='ok' value='"+obj.c_id+"'>";
+							$("#tbody").append("<tr><td>"+a+"</td><td>"+obj.c_id+"</td><td>"+obj.c_name+"</td><td>"+obj.c_address+"</td><td>"+obj.t_name+"</td><td>"+xuanzhe+"</td></tr>");
+						}
+						
+						var ok = document.getElementsByName("course");
+						for(var i = 0;i < ok.length;i++){
+							$("input[type=checkbox]").live("click",function(){
+												
+							$.ajax({
+								type:"get",
+								url:"http://localhost/xiangmuTwo/index.php?class=sql&action=stuChekCoursStop",
+								success:function(e){
+									var e = eval(e);
+//										console.log(e);
+									for(var a = 0;a < e.length;a++){
+										var c = e[a];
+//										console.log(c.c_id);
+										console.log(val);
+										if(val = c.c_id){
+											$(ok[i]).attr("disabled","checked");
+										}
+									}
+								}
+							});
+						})
+						}
+					}
+				});
+				
+				
+				$("#xuanzheCourse").live("click",function(){
+					var obj = document.getElementsByName("course");
+					var yes = "";
+//					console.log(obj);
+					for(var i = 0;i < obj.length;i++){
+						if(obj[i].checked){
+							yes += obj[i].value;
+						}
+					}
+					if(yes == ""){
+						alert("请选择课程");
+						return false;
+					}
+		//			yes=yes.substring(0,yes.length-1);//删除最后一个,
+	//				alert(yes);
+//					if(yes.length > 4){
+//						alert("每个学生只能选择一门课程！");
+//						return false;
+//					}else{
+						$.ajax({
+							type:"get",
+							data:{"cId":yes},
+							url:"http://localhost/xiangmuTwo/index.php?class=sql&action=stuCheckedCours",
+							success:function(res){
+								alert("选课成功");
+						//		console.log("121231")
+								res = eval(res);
+						//		alert(res);
+								console.log(res);
+							}
+						});
+//					}
+				})
+				
+				$("#rest").click(function(){ 
+					$("input[type='checkbox']").removeAttr("checked");//取消全选 
+				}) 
+			})
+		</script>
+	</body>
+</html>

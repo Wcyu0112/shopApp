@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">		
+		<title>学生界面</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background:#515D69 ;
+			}
+			.header{
+				width: 100%;
+				min-width: 1024px;
+				background: gray;
+				height: 50px;
+				/*line-height: 50px;*/
+				border-top: 2px solid lawngreen;
+				position: absolute;
+				top:0;
+				z-index: 10;
+			}
+			.title{
+				font-size: 25px;
+				line-height: 50px;
+				color: #fff;
+				font-weight: bolder;
+			}
+			.user{
+				margin-top: -30px;
+				position: absolute;
+				right: 0;				
+			}
+			.user span{
+				z-index: 100;
+				margin-left: 15px;
+				position: relative;
+				top:-10px;
+			}
+			.user img{
+				margin-top: -20px;				
+				width: 50px;
+				height: 50px;
+				border-radius: 25px;
+			}
+			.bar{
+				width: 100%;
+				min-width: 1024px;
+				position: absolute;
+				top:50px;
+				bottom: 80px;
+				z-index: 10;
+				
+			}
+			.nav{
+				background: lightblue;
+				width: 99%;
+				height: 100%;
+				margin: 5px;
+				border-radius: 10px;
+				border: 5px solid #1F3860;
+				/*z-index: 100;*/
+				overflow: auto;
+				position: absolute;
+				
+			}
+			.nav .left{
+				width: 200px;
+				height: 100%;
+				border-right: 5px black solid;
+				/*background: green;*/
+				float: left;				
+			}
+			.mav{
+				z-index: 100;
+				/*position: absolute;*/
+				/*top: 0px;*/
+				/*width: 100%;*/
+				/*width: auto;*/
+				overflow: hidden;
+				height: 100%;
+				/*min-width: 970px;*/
+				/*background: yellow !important;*/
+				margin-left: 200px;
+			}
+			
+			.footer{
+				background: lightcoral;
+				margin-top: 15px;
+				margin-bottom: 5px;
+				position: absolute;
+				width: 99%;
+				min-width: 1024px;
+				height: 35px;
+				color: #fff;		
+				bottom: 10px;
+				z-index: 10;		
+			}
+			
+			.footer p{
+				text-align: center;
+				line-height: 35px;
+			}
+			#logOut{				
+				cursor: pointer;
+			}
+			#logOut:hover{
+				color: blue;
+				border-bottom: blue;
+				text-decoration:underline;
+			}
+		</style>
+	</head>
+	<body style="overflow: hidden;">
+		<div class="header">
+			<div class="title">欢迎进入外滩学院教务管理系统</div>
+			<div class="user">
+				<img id="imgPhoto"/>
+				<span>用户角色：学生</span>
+				<span><a id="logOut">退出登录</a></span>
+			</div>
+		</div>
+		<div class="bar">	
+			<div class="nav" style="overflow: hidden;">
+				<div class="left">
+					<iframe style="width: 100%;height: 100%;" src="treeStu.html"></iframe>
+				</div>
+				<div class="mav">
+					<iframe name="MainFrame" style="width: 100%;height: 100%;background: #fff;">
+					</iframe>
+				</div>
+			</div>
+		</div>
+		<div class="footer nav">
+			<p>版权所有&copy;王朝玉</p>
+		</div>
+	</body>
+	<script type="text/javascript" src=../js/jquery-1.7.1.js></script>
+	<script>
+		$(function(){
+			$.ajax({
+				type:"post",
+				url:"http://localhost/xiangmuTwo/Public/Plogin.php",
+				success:function(res){
+					if(res == "a"){
+						return false;
+					//	stop();
+					}else{
+						window.location.href = "http://localhost/xiangmuTwo/Public/Plogin.html"
+					}
+				}
+			});
+			
+			$.ajax({
+				type:"get",
+				url:"http://localhost/xiangmuTwo/View/Teacher/newfile.php",
+				success:function(res){
+					$("#imgPhoto").after("<span>当前用户："+res+"</span>");
+				}
+			});
+			
+			$.ajax({
+				type:"get",
+				url:"http://localhost/xiangmuTwo/index.php?class=sql&action=imgViewStu",
+				success:function(res){
+					res = eval(res);
+					$("#imgPhoto").attr("src","../../Public/"+res[0]["photo"]);
+				}
+			});
+			
+			$("#logOut").live("click",function(){
+				if(confirm("你确定要退出吗？")){
+					/* alert("ddddddd");		 */			
+					$.ajax({
+						type:"post",
+						url:"http://localhost/xiangmuTwo/index.php?class=User&action=logout",
+						 success:function(res){
+							window.location.href = "http://localhost/xiangmuTwo/View/login.html";
+						} 
+					});				
+				}
+			})
+		})
+	</script>
+</html>

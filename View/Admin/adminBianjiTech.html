@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%; height: 50px;">
+				<div style="float: left;margin-right: 100px;" id="fiel">
+					
+				</div>
+				<legend>当前位置</legend>
+			</fieldset>
+		</div>
+	
+		<div>
+			<table border="1" cellspacing="1" width="100%" style="margin-top:20px;">
+				<tr>
+					<td>职工号：</td>
+					<td><input type="text" name="t_id" id="t_id" /></td>
+				</tr>
+				<tr>
+					<td>姓名：</td>
+					<td><input type="text" name="t_name" id="t_name"></td>
+				</tr>
+				<tr>
+					<td>性别：</td>
+					<td>
+						<input type="radio" name="s_sex" value="男">男
+						<input type="radio" name="s_sex" value="女">女
+					</td>
+				</tr>
+				<tr>
+					<td>职称：</td>
+					<td>
+						<select name="zhicheng">
+							<option value="-1">请选择职称</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>所属学院：</td>
+					<td>
+						<select name="xueyuan">
+							<option value="-1">请选择学院</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>专业：</td>
+					<td>
+						<select name="zhuanye">
+							<option value="-1">请选择专业</option>
+						</select>
+					</td>
+				</tr>
+			<!-- 	<tr>
+					<td>所上课程：</td>
+					<td>
+						<select name="cours">
+							<option value="-1">请选择课程</option>
+						</select>
+					</td>
+				</tr> -->
+				<tr>
+					<td>恢复默认密码：</td>
+					<td>
+						<input type="radio" value="trun" name="hf_pwd" />是
+						<input type="radio" value="false" name="hf_pwd" checked="checked"/>否
+					</td>
+				</tr>
+			</table>
+			<input type="button" id="sub" value="修改">
+			<button id="res">重置</button>
+		</div>
+		<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				var a = window.location.href.split("=")[1];//得到lemon 
+				$.ajax({
+					type:"get",
+//					url:"http://localhost/xiangmuTwo/View/Admin/newfile.php",
+					success:function(){
+						$("#fiel").after("<span>当前位置：用户管理->查看用户列表->查看教师信息->编辑教师编号为："+a+"信息</span>");				
+					}
+				});
+				
+				$.ajax({
+					type:"get",
+					data:{"bianhao":a},
+					url:"http://localhost/xiangmuTwo/index.php?class=sql&action=bianjiTech",
+					dataType:"json",
+					success:function(res){
+					//	res = eval(res);
+						console.log(res);
+						$("#t_id").val(res[0]["t_id"]);
+						$("#t_name").val(res[0]["t_name"]);
+						$("input[name='sex']").val([0]["checked"]);
+//						for(var i = 0;i < res.length;i++){
+//							a++;
+//							var obj = res[i];
+//							var bianji = "<button class='bianji' for='"+obj.t_id+"'>编辑</button>";
+//							var shan = "<button class='shan' for='"+obj.t_id+"'>删除</button>";
+//							$("#table").append("<tr><td>"+a+"</td><td>"+obj.t_id+"</td><td>"+obj.t_name+"</td><td>"+obj.sex+"</td><td>"+obj.zc_name+"</td><td>"+obj.x_name+"</td><td>"+obj.z_name+"</td><td></td><td>"+bianji+shan+"</td></tr>");
+//						}
+				//		$("#t_id").val()=res[0][0];
+					}
+				});
+			})
+			
+		</script>
+	</body>
+</html>

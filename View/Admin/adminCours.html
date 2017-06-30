@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%; height: 50px;">
+				<div style="float: left;margin-right: 100px;">
+					当前位置：用户管理->查看用户列表->查看课程信息
+				</div>
+				<legend>查询条件</legend>
+				<label>请选择查询的类型
+					<select name="select">
+						<option>请选择</option>
+					</select>
+					<input type="text" name="sel_inp" style="height: 20px; border-radius:15px;outline:none;padding-left: 10px;" placeholder='请输入要查询的条件'/>
+				</label>
+				<button style="color:blue;width: 100px;height: 25px; border-radius: 15px; outline:none; box-shadow:2px 2px 5px gray">查询</button>
+			</fieldset>
+		</div>
+		<div style="margin-top: 20px;">
+			<table id="table" border="1" cellspacing="0" style="width: 100%;text-align: center;font-weight: bold;">
+				<tr>
+					<td>序号</td>
+					<td>课程号</td>
+					<td>课程名</td>
+					<td>学时</td>
+					<td>任课老师</td>
+					<td>操作</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+	<script type="text/javascript" src=../js/jquery-1.7.1.js></script>
+	<script type="text/javascript">
+		$(function(){
+			//console.log("aaaaaa");
+			//alert("aaaaaaaaa");
+			var b = 0;
+			$.ajax({
+				type:"get",
+				url:"http://localhost/xiangmuTwo/index.php?class=sql&action=chaxunCours",
+				success:function(res){
+					res = eval(res);
+					console.log(res);
+					for(var i = 0;i < res.length;i++){
+						b++;
+						var obj = res[i];
+						var bianji = "<button>编辑</button>";
+						var shan = "<button class='shan' for='"+obj.c_id+"'>删除</button>";
+						$("#table").append("<tr><td>"+b+"</td><td>"+obj.c_id+"</td><td>"+obj.c_name+"</td><td>"+obj.xueshi+"</td><td>"+obj.t_name+"</td><td>"+bianji+shan+"</td></tr>");
+					}
+				}
+			});
+			
+			$(".shan").live("click",function(){
+				var c_id = $(this).attr("for");
+				if(confirm("您确定要删除标号为"+c_id+"的课程吗？")){
+	 				$.ajax({
+						type:"get",
+						data:{"id":c_id},
+						url:"http://localhost/xiangmuTwo/index.php?class=sql&action=shanCours",
+						success:function(res){
+	//						alert(res);
+							if(res){
+							//	$("#a"+id+"").remove();
+								alert(res);
+							}else{
+								alert("删除失败");
+							}
+						}
+					}); 
+				}else{
+					return false;
+				}
+			})
+		})
+		
+	</script>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>用户登录</title>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			body{
+				/*width: 100%;*/
+				/*height: 100%;*/
+				background-image:url(images/logBkImg.jpg);
+				background-repeat: no-repeat;
+				/*background-repeat-y: initial;*/
+				/*background-size:100%;*/
+			}
+			#bar{
+				width: 400px;
+				height: 350px;
+				/*background: red;*/
+				background: rgba(193,210,240,0.2);
+				position: absolute;
+				left: 50%;
+				margin-left: -200px;
+				top: 50%;
+				margin-top: -175px;
+				border-radius: 10px;
+				/*opacity:0.7;*/
+			}
+			.nav{
+				width: 235px;
+				top:50%;
+				/*margin: auto;*/
+				position: relative;
+				top:125px;
+				margin-top: -100px;
+				left: 200px;
+				margin-left: -112px;
+			}
+			.but{
+				width: 115px;
+			}
+			.nav div{
+				margin-top: 20px;
+			}
+			#yzm{
+				width: 120px;
+			}
+			img{
+				border: 1px solid gray;
+				vertical-align:middle;
+				height: 30px;
+				width: 95px;
+			}
+			input,#d_id{
+				width: 240px;
+				height: 30px;
+				border-radius: 5px;
+				font-size: 16px;
+				background: #065FB9;
+				padding-left: 5px;
+				color: #fff;
+				border: 1px solid #282828;
+				outline: none;
+			}
+			button,#rest{
+				height: 40px;
+				border-radius: 10px;
+				font-size: 28px;
+				color: #fff;
+				background: #065FB9;
+				font-family: "楷体";
+				border: none;
+				box-shadow: 2px 2px 5px gray;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="bar">
+			<h1>外滩学院教务管理系统</h1>
+			<form action="../index.php?class=User&action=login" method="post" id="form">
+		    	<div class="nav">
+		    		<div >
+		    			<!--用户名:&nbsp;&nbsp;-->
+		    			<input type="text" id="e_name" name="user" placeholder="请输入用户名"/>
+		    		</div>
+		    		<div>
+		    			<!--密&nbsp;&nbsp;&nbsp;码:&nbsp;&nbsp;-->
+		    			<input type="text" id="e_date" name="pwd" placeholder="请输入密码"/>
+		    			</div>
+		    		<div>
+		    		<!--取出可以用的主键-->
+		    			<!--角&nbsp;&nbsp;&nbsp;色:&nbsp;&nbsp;-->
+		    			<select id = "d_id" name="sel">
+		    				<option value="-1">请选择用户角色</option>
+		    				<option value="1">管理员</option>
+		    				<option value="2">老师</option>
+		    				<option value="3">学生</option>
+		    			</select>
+		    		</div>
+		    		<div >
+		    			<!--验证码:&nbsp;&nbsp;-->
+		    			<input type="text" id="yzm" name="yzm" placeholder="请输入右侧验证码"/>
+		    			<img src="http://localhost/xiangmuTwo/View/yanzheng.php" id="img"/>    			
+		    		</div>
+		    		<div>
+		    			<!--<input type="button" id = "log" class="but" name="button" value="登录" />-->
+		    			<button id="log" class="but">登录</button>
+		    			<input type="hidden" name="logg" id="hid"/>
+		    			<input type="button" id = "rest" class="but" value="重置">
+		    		</div>
+		    		<span id="yanzheng"></span>
+		    	</div>
+			</form>		
+		</div>
+		 <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+		 <script type="text/javascript"> 
+			var img = document.getElementById("img");
+			var rest = document.getElementById("rest");
+			var log = document.getElementById("log");
+			img.onclick = function(){
+				img.src = "http://localhost/xiangmuTwo/View/yanzheng.php";
+			}
+			rest.onclick=function(){
+				document.getElementById("e_name").value = "";
+				document.getElementById("e_date").value = "";
+				document.getElementById("yzm").value = "";
+				document.getElementById("d_id").value = -1;
+			}
+		
+		// 	log.setAttribute("type", "submit");
+		// 	log.form.Submit();
+			$("#log").live("click",function(){//添加
+				$(this).attr("border","1px solid black");
+				var user = $("#e_name").val();
+				var pwd = $("#e_date").val();
+				var yzm = $("#yzm").val();
+				var log = $()
+		// 		alert(yzm);
+				var js = $("#d_id").val();
+				if(user == "" || pwd == "" ||  yzm == "" || js == ""){
+					alert("不能为空");
+					return false;					
+				}else{
+					$("#hid").attr("value", "a");
+					$("#log").setAttribute("type", "submit");
+					
+					/*	var log = $("#hid").val();
+					$.ajax({
+						type:"post",
+						data:{"log":log},
+						url:"http://localhost/xiangmuTwo/Public/Plogin.php"
+						
+						  success:function(res){
+							alert(res);
+							if(res == "a"){
+								
+							}
+						} 
+						
+						
+					});*/
+					
+				}
+			});
+		</script>
+	</body>
+</html>

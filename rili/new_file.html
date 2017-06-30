@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="easyui/locale/easyui-lang-zh_CN.js"></script>
+		 <script type="text/javascript" src="js/index.js"></script> 
+		<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css" />
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%; height: 50px;">
+				<div style="float: left;margin-right: 100px;">
+					当前位置：用户管理->查看用户列表->添加学生
+				</div>
+				<legend>当前位置</legend>
+			</fieldset>
+		</div>
+		
+		<div style="margin-top:20px;">
+			<table border="1" cellspacing="1" width=100%>
+				<tr>
+					<td>学生编号：</td>
+					<td><input type="text" name="s_id" id="s_id" required="required"/></td>
+				</tr>
+				<tr>
+					<td>姓名：</td>
+					<td><input type="text" name="s_name" id="s_name" required="required"/></td>
+				</tr>
+				<tr>
+					<td>性别：</td>
+					<td>
+						<input type="radio" name="s_sex" value="男" checked>男
+						<input type="radio" name="s_sex" value="女">女
+					</td>
+				</tr>
+				<tr>
+					<td>出生日期：</td>
+					<td><input type="text" name="bir" id="box"></td>
+				</tr>
+				<tr>
+					<td>所属学院</td>
+					<td>
+						<select name="xueyuan" id="addStuXueyuan">
+							<option value="-1">请选择学院</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>专业：</td>
+					<td>
+						<select name="zhuanye" id="addStuZhuanye">
+							<option value="-1">请选择专业</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<button id="sub">添加</button>
+			<button id="res">重置</button>
+		</div>
+	</body>
+	<!--<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>-->
+	<script type="text/javascript">
+		$(function(){
+			 $.ajax({     //查询学院
+				type:"get",
+				url:"../../index.php?class=sql&action=xueyuanCx",
+				success:function(res){
+					res = eval(res);
+					for(var i = 0;i < res.length;i++){
+						var obj = res[i];
+						$("#addStuXueyuan").append("<option value='"+obj.x_id+"'>"+obj.x_name+"</option>")
+					}
+				}
+			}) 
+			
+			$("#addStuXueyuan").change(function(){
+				var val = $(this).val(); 
+				$("#addStuZhuanye option").remove();
+				$("#addStuZhuanye").append("<option value='-1'>请选择专业</option>");
+				$.ajax({
+					type:"get",
+					data:{"val":val},
+					url:"../../index.php?class=sql&action=zhuanyeCx",
+					success:function(res){
+						res = eval(res);
+						for(var i = 0;i < res.length;i++){
+							var obj = res[i];
+							$("#addStuZhuanye").append("<option value='"+obj.z_id+"'>"+obj.z_name+"</option>");
+						}
+					}
+				});
+			});  
+			
+			$("#sub").live("click",function(){
+				var sex = $("input[name='s_sex']:checked").val();
+				var s_id = $("#s_id").val();
+				var s_name = $("#s_name").val();
+				var bir = $("#bir").val();
+				var Xueyuan = $("#addStuXueyuan").val();
+				var zhuanye = $("#addStuZhuanye").val();
+				$.ajax({
+					type:"get",
+					data:{"s_id":s_id,"s_name":s_name,"sex":sex,"bir":bir,"xueyuan":Xueyuan,"zhuanye":zhuanye},
+					url:"../../index.php?class=sql&action=addStu",
+					success:function(res){
+						//res = eval(res);
+						 if(res){
+							alert(res);
+						}else{
+							alert("添加失败，请重试！");
+						} 
+					}
+				}); 
+			})
+			
+		})
+	</script>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%; height: 50px;">
+				<div style="float: left;margin-right: 100px;">
+					当前位置：用户管理->查看用户列表->查看教师信息
+				</div>
+				<legend>查询条件</legend>
+				<label>请选择查询的类型
+					<select name="select" id="selTechAdmin">
+						<option value="-1">请选择</option>
+						<option value="1">职工号</option>
+						<option value="2">姓名</option>
+						<option value="3">性别</option>
+						<option value="4">所属学院</option>
+						<option value="5">专业</option>
+					</select>
+					<input type="text" name="sel_inp" id="sel_inp" style="height: 20px; border-radius:15px;outline:none;padding-left: 10px;" placeholder='请输入要查询的条件'/>
+				</label>
+				<button id="butChaxuan" style="color:blue;width: 100px;height: 25px; border-radius: 15px; outline:none; box-shadow:2px 2px 5px gray">查询</button>
+			</fieldset>
+		</div>
+		
+		<div style="margin-top: 20px;">
+			<table id="table" border="1" cellspacing="0" style="width: 100%;text-align: center;font-weight: bold;">
+				<thead>
+					<tr>
+						<td>序号</td>
+						<td>职工号</td>
+						<td>姓名</td>
+						<td>性别</td>
+						<td>职称</td>
+						<td>所属学院</td>
+						<td>专业</td>
+						<!-- <td>所上课程</td>	 -->
+						<td>操作</td>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+				
+				</tbody>
+			</table>
+			
+		</div>
+	</body>
+	<script type="text/javascript" src=../js/jquery-1.7.1.js></script>
+	<script type="text/javascript">
+		$(function(){
+			//console.log("aaaaaa");
+			//alert("aaaaaaaaa");
+			var a = 0;
+			$.ajax({
+				type:"get",
+				url:"http://localhost/xiangmuTwo/index.php?class=sql&action=chaxunTech",
+				success:function(res){
+					res = eval(res);
+				//	console.log(res);
+					for(var i = 0;i < res.length;i++){
+						a++;
+						var obj = res[i];
+						var bianji = "<button class='bianji' tname='"+obj.t_name+"' for='"+obj.t_id+"'>编辑</button>";
+						var shan = "<button class='shan' for='"+obj.t_id+"'>删除</button>";
+						$("#tbody").append("<tr><td>"+a+"</td><td>"+obj.t_id+"</td><td>"+obj.t_name+"</td><td>"+obj.sex+"</td><td>"+obj.zc_name+"</td><td>"+obj.x_name+"</td><td>"+obj.z_name+"</td><td>"+bianji+shan+"</td></tr>");
+					}
+				}
+			});
+			$(".shan").live("click",function(){
+				var id = $(this).attr("for");
+				var table = "teacher";
+				var sCol = "t_id";
+	//			alert(id);
+				if(confirm("您确定要删除标号为"+id+"的教师吗？")){
+	 				$.ajax({
+						type:"get",
+						data:{"id":id,"table":table,"sCol":sCol},
+						url:"http://localhost/xiangmuTwo/index.php?class=sql&action=shan",
+						success:function(res){
+	//						alert(res);
+							if(res){
+							//	$("#a"+id+"").remove();
+								alert(res);
+							}else{
+								alert("删除失败");
+							}
+						}
+					}); 
+				}else{
+					return false;
+				}
+			})
+			
+			$(".bianji").live("click",function(){
+				var id = $(this).attr("for");
+				location.href = "adminBianjiTech.html?index="+id;				
+//				alert(id);
+			})
+			
+			
+			
+			
+			$("#butChaxuan").live("click",function(){
+				if($("#selTechAdmin").val()==-1){
+					alert("请选择查询类型！");
+				}else{
+					var sta = $("#selTechAdmin").val();
+					var sel_inp = $("#sel_inp").val();
+					var aa = 0;
+					$.ajax({
+						type:"get",
+						data:{"selTechLeix":sta,"selInp":sel_inp},
+						url:"http://localhost/xiangmuTwo/index.php?class=sql&action=chaxunShaixuan",
+						success:function(res){
+							res = eval(res);
+						//	console.log(res);
+							if(res.length==0){
+								alert("没有此人信息");
+								return false;
+							}
+							$("#tbody").empty();
+							for(var i = 0;i < res.length;i++){
+								aa++;
+								var obj = res[i];
+								var bianji = "<button class='bianji' tname='"+obj.t_name+"' for='"+obj.t_id+"'>编辑</button>";
+								var shan = "<button class='shan' for='"+obj.t_id+"'>删除</button>";
+								$("#tbody").append("<tr><td>"+aa+"</td><td>"+obj.t_id+"</td><td>"+obj.t_name+"</td><td>"+obj.sex+"</td><td>"+obj.zc_name+"</td><td>"+obj.x_name+"</td><td>"+obj.z_name+"</td><td>"+bianji+shan+"</td></tr>");
+							}
+						}
+					});
+				}
+			})
+		})
+		
+	</script>
+</html>

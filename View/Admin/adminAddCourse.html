@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<fieldset style="width: 100%; height: 50px;">
+				<div style="float: left;margin-right: 100px;">
+					当前位置：用户管理->查看用户列表->添加课程
+				</div>
+				<legend>当前位置</legend>
+			</fieldset>
+		</div>
+		
+		<div>
+			<table border="1" cellspacing="1" width="100%" style="margin-top:20px;">
+				<tr>
+					<td>课程ID：</td>
+					<td><input type="text" name="c_id" id="c_id"></td>
+				</tr>
+				<tr>
+					<td>课程名：</td>
+					<td><input type="text" name="c_name" id="c_name"/></td>
+				</tr>
+				<tr>
+					<td>上课地址：</td>
+					<td><input type="text" name="c_address" id="c_address" /></td>
+				</tr>
+				<tr>
+					<td>学时：</td>
+					<td><input type="text" name="c_address" id="c_time" /></td>
+				</tr>
+				<tr>
+					<td>任课教师：</td>
+					<td>
+						<select name="addCouTech" id="addCouTech">
+							<option value="-1">请选择教师</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<button id="sub">添加</button>
+			<button id="res">重置</button>
+		</div>
+	</body>
+	
+	<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			
+			$("#sub").live("click",function(){
+				if($("#addCouTech").val() == -1){
+					alert("请选择任课教师！");
+				}else{
+					var c_id = $("#c_id").val();
+					var c_name = $("#c_name").val();
+					var c_add = $("#c_address").val(); 
+					var c_time = $("#c_time").val();
+					var t_id = $("#addCouTech").val();
+					 $.ajax({
+						type:"get",
+						data:{"c_id":c_id,"c_name":c_name,"c_add":c_add,"c_time":c_time,"t_id":t_id},
+						url:"../../index.php?class=sql&action=addCourse",
+						success:function(res){
+							alert(res);
+						}
+					}); 
+				}
+			})
+				
+			$.ajax({
+				type:"get",
+				url:"http://localhost/xiangmuTwo/index.php?class=sql&action=chaxunTech",
+				success:function(res){
+					res = eval(res);
+					console.log(res);
+					for(var i = 0;i < res.length;i++){
+						var obj = res[i];
+						$("#addCouTech").append("<option value='"+obj.t_id+"'>"+obj.t_name+"</option>");
+					}
+				}
+			});
+			
+			
+
+			
+		})
+	</script>
+</html>
